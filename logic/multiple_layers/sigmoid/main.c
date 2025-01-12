@@ -13,15 +13,18 @@ double sigmoid_derivative(double x) {
     return sigmoid(x) * (1 - sigmoid(x));
 }
 
-void train(double weights[3][3], int inputs[4][2], int expected_outputs[4]) {
-    double sums[3];
-    double neuron_outputs[3];
-
+void fill_weights_table(double weights[3][3]) {
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             weights[i][j] = ((double)rand() / RAND_MAX) * 2 - 1;
         }
     }
+}
+
+void train(double weights[3][3], int inputs[4][2], int expected_outputs[4]) {
+    double sums[3];
+    double neuron_outputs[3];
+    fill_weights_table(weights);
 
     for (int epoch = 0; epoch < EPOCHS; epoch++) {
         for (int example = 0; example < 4; example++) {
@@ -38,9 +41,9 @@ void train(double weights[3][3], int inputs[4][2], int expected_outputs[4]) {
             double error = expected_outputs[example] - neuron_outputs[2];
             double delta = error * sigmoid_derivative(sums[2]);
 
-            weights[2][2] += delta;
             weights[2][0] += delta * neuron_outputs[0];
             weights[2][1] += delta * neuron_outputs[1];
+            weights[2][2] += delta;
 
             weights[0][0] += delta * weights[2][0] * sigmoid_derivative(sums[0]) * inputs[example][0];
             weights[0][1] += delta * weights[2][0] * sigmoid_derivative(sums[0]) * inputs[example][1];
