@@ -5,9 +5,9 @@
 #define LRATE 1
 
 void train(struct Matrix* W1, struct Matrix* B1, struct Matrix* W2, struct Matrix* B2,
-           struct Matrix* W3, struct Matrix* B3, const int inputs[4][2], const int outputs[4])
+           struct Matrix* W3, struct Matrix* B3, const double inputs[4][2], const int outputs[4])
 {
-    int x1, x2;
+    double x1, x2;
     int y;
     for (size_t _ = 0; _ < EPOCH; ++_) {
         for (size_t in_idx = 0; in_idx < 4; ++in_idx)
@@ -39,7 +39,7 @@ void train(struct Matrix* W1, struct Matrix* B1, struct Matrix* W2, struct Matri
 
             for (size_t i = 0; i < W3->rows; ++i) {
                 for (size_t j = 0; j < W3->cols; ++j)
-                    W3->matrix[i][j] -= LRATE *d_err_3 * d_s(Z3->matrix[i][0]) * A2->matrix[j][0];
+                    W3->matrix[i][j] -= LRATE * d_err_3 * d_s(Z3->matrix[i][0]) * A2->matrix[j][0];
             }
 
             for (size_t i = 0; i < W3->rows; ++i) {
@@ -116,10 +116,9 @@ int main(void)
 {
     const size_t m = 2; // input size
     size_t n = 3; // neurons in 1st hidden layer
-    size_t o = 5; // neurons in 2nd hidden layer
-    const int inputs[4][2] = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
+    size_t o = 2; // neurons in 2nd hidden layer
+    const double inputs[4][2] = {{0.01, 0.01}, {0.01, 1.01}, {1.01, 0.01}, {1.01, 1.01}};
     const int outputs[4] = {0, 1, 1, 0};
-    srand(time(NULL));
 
     struct Matrix* W1 = mtrx_init(n, m); // first hidden
     struct Matrix* B1 = mtrx_init(n, 1);
@@ -135,10 +134,13 @@ int main(void)
         X->matrix[0][0] = inputs[i][0];
         X->matrix[1][0] = inputs[i][1];
 
-        printf("Input: {%d, %d}; Expected: %d; Predicted: %Lf\n", 
+        printf("Input: {%f, %f}; Expected: %d; Predicted: %Lf\n", 
         inputs[i][0], inputs[i][1], outputs[i], predict(W1, B1, W2, B2, W3, B3, X));
 
         mtrx_free(X);
     }
+    mtrx_free(W1); mtrx_free(B1);
+    mtrx_free(W2); mtrx_free(B2);
+    mtrx_free(W3); mtrx_free(B3);
     return 0;
 }

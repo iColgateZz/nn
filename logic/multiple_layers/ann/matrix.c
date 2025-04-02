@@ -12,7 +12,7 @@ void mtrx_fill_rand(struct Matrix* m)
 {
     for (size_t i = 0; i < m->cols; ++i) {
         for (size_t j = 0; j < m->rows; ++j)
-            m->matrix[j][i] = (long double)rand() / RAND_MAX;
+            m->matrix[j][i] = ((long double) arc4random() / RAND_MAX) - 0.5;
     }
 }
 

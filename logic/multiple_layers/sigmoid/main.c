@@ -16,7 +16,7 @@ long double act_deriv(long double x) {
 void fill_weights(long double weights[3][3]) {
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            weights[i][j] = ((long double)rand() / RAND_MAX) * 0.1 - 0.05;
+            weights[i][j] = ((long double)arc4random() / RAND_MAX) * 0.1 - 0.05;
         }
     }
 }
